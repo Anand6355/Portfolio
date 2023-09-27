@@ -117,7 +117,7 @@
 
                 <div class="box">
                     <div class="box-hover">
-                        <span><a href="https://anand6355.github.io/Amazon-web/">Landing Page </a></span>
+                        <span><a href="https://anand6355.github.io/Amazon-web/" target="_blank">Landing Page </a></span>
                         
                     </div>
                     <img src="img/project1.png" alt="">
@@ -166,37 +166,49 @@
     <!-- start Contact -->
 
     <section id="Contact" class="contact">
-        <div class="contanier">
+        <div class="container">
             <div class="sec-top">
-                <h1>Contact <span>Me</span></h1>
+                <h1>Contact<span>Me</span></h1>
             </div>
-
-            <form action="" onsubmit="sendEmail(); reset(); return false;">
-                <input id="firstName" type="text" placeholder="First Name">
-                <input id="lastName" placeholder="Last Name">
-                <input id="phone" placeholder="Phone Number">
-                <input id="email" placeholder="Email Address">
-                <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
-                <button class="btn"  type="submit">Send Message</button>
+    
+            <form id="contactForm">
+                <input id="firstName" type="text" placeholder="First Name" name="firstName">
+                <input id="lastName" placeholder="Last Name" name="lastName">
+                <input id="phone" placeholder="Phone Number" name="phone">
+                <input id="email" placeholder="Email Address" name="email">
+                <textarea name="message" id="message" cols="30" rows="10" placeholder="Your Message" name="message"></textarea>
+                <button class="submit btn" type="submit">Send Message</button>
             </form>
+            <div class="message"></div> <!-- Added a div for displaying messages -->
         </div>
     </section>
     <script src="main.js"></script>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script>
-        function sendEmail(){
-                Email.send({
-                Host : "smtp.gmail.com",
-                Username : "anandkumar6355@gmail.com",
-                Password : "********",
-                To : 'anand20_ug@ee.nits.ac.in',
-                From : document.getElementById("email").value,
-                Subject : "New Contact Enquiry",
-                Body : "This is the body"
-            }).then(
-            message => alert(message)
-            );
-        }
+        let url = "https://script.google.com/macros/s/AKfycbx8zfoCLyCyFi7tweTgeeNcvPJ6QXNvyb4F8VowtmUOmF4sZGK90EKQ_BOGKVN-hD5G/exec";
+        let form = document.getElementById("contactForm"); // Reference the form by its id
+        let submit = form.querySelector(".submit"); // Reference the submit button within the form
+        let message = document.querySelector(".message");
+    
+        // Event listener for the form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submit.textContent = "Submitting..."; // Use textContent to change button text
+    
+            fetch(url, {
+                method: "POST",
+                body: new FormData(form)
+            })
+            .then(res => res.text())
+            .then(data => {
+                message.innerHTML = data;
+                submit.textContent = "Send Message"; // Reset the button text
+                form.reset(); // Optionally reset the form after successful submission
+            })
+            .catch(err => {
+                message.innerHTML = err;
+                submit.textContent = "Send Message"; // Reset the button text on error
+            });
+        });
     </script>
 </body>
 </html>
